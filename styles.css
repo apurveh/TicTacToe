@@ -1,0 +1,53 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+    flex-direction: column;
+}
+
+#statusDisplay {
+    margin: 20px;
+    font-size: 1.5em;
+    color: #333;
+}
+
+#gameContainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow to the container */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+}
+
+.row {
+    display: flex;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    cursor: pointer;
+    border: 2px solid #000;
+    transition: background-color 0.3s, transform 0.2s;
+    border-radius: 5px; /* Rounded corners for cells */
+}
+
+.cell:hover {
+    background-color: #e0e0e0;
+    transform: scale(1.1); /* Slightly increase size on hover */
+}
+#restartButton {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
