@@ -2,13 +2,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const cells = document.querySelectorAll('[data-cell]');
     const restartButton = document.getElementById('restartButton');
     const statusDisplay = document.getElementById('statusDisplay');
+    let gameBoard = ['', '', '', '', '', '', '', '', ''];
     let turn = 'X';
 
     function setStatusMessage(turn) {
         statusDisplay.textContent = `${turn}'s turn`;
     }
 
-    function checkWin(currentPlayer) {
+    function checkWin(board, currentPlayer) {
         const winningCombinations = [
             [0, 1, 2],
             [3, 4, 5],
@@ -20,53 +21,53 @@ document.addEventListener('DOMContentLoaded', () => {
             [2, 4, 6],
         ];
         return winningCombinations.some(combination => 
-            combination.every(index => cells[index].textContent === currentPlayer)
+            combination.every(index => board[index] === currentPlayer)
         );
     }
 
-    function isDraw() {
-        return [...cells].every(cell => cell.textContent);
+    function isDraw(board) {
+        return board.every(cell => cell) && !checkWin(board, 'X') && !checkWin(board, 'O');
     }
 
-    function clearCells() {
-        cells.forEach(cell => cell.textContent = '');
-        document.body.style.backgroundColor = '';
-    }
-
-    function handleClick(e) {
-        const cell = e.target;
-
-        if (cell.textContent || checkWin(turn)) {
+    function handleClick(index) {
+        if (gameBoard[index] || checkWin(gameBoard, turn)) {
             return;
         }
 
-        cell.textContent = turn;
-        if (checkWin(turn)) {
+        gameBoard[index] = turn;
+        renderBoard();
+
+        if (checkWin(gameBoard, turn)) {
             statusDisplay.textContent = `${turn} wins!`;
             document.body.style.backgroundColor = "#90ee90";
-            cells.forEach(cell => cell.removeEventListener('click', handleClick));
             return;
-        } else if (isDraw()) {
-            statusDisplay.textContent = `Draw!`;
+        } else if (isDraw(gameBoard)) {
+            statusDisplay.textContent = 'Draw!';
+            document.body.style.backgroundColor = "#ffcccb";
             return;
         }
-        
+
         turn = turn === 'X' ? 'O' : 'X';
         setStatusMessage(turn);
     }
 
-    function restartGame() {
-        clearCells();
-        turn = 'X';
-        setStatusMessage(turn);
-        cells.forEach(cell => {
-            cell.addEventListener('click', handleClick, { once: true });
+    function renderBoard() {
+        gameBoard.forEach((cell, index) => {
+            cells[index].textContent = cell;
         });
     }
 
-    setStatusMessage(turn);
-    cells.forEach(cell => {
-        cell.addEventListener('click', handleClick, { once: true });
+    function restartGame() {
+        gameBoard.fill('');
+        turn = 'X';
+        setStatusMessage(turn);
+        renderBoard();
+        document.body.style.backgroundColor = '';
+    }
+
+    cells.forEach((cell, index) => {
+        cell.addEventListener('click', () => handleClick(index));
     });
     restartButton.addEventListener('click', restartGame);
 });
+
